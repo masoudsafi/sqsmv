@@ -26,8 +26,9 @@ environment variables must be set.
 
 Supply source and destination URL endpoints.
 
-    sqsmv -src https://region.queue.amazonaws.com/123/queue-a -dest https://region.queue.amazonaws.com/123/queue-b
-
+    sqsmv -src https://region.queue.amazonaws.com/123/queue-a -l
+    
+    sqsmv -src https://region.queue.amazonaws.com/123/queue-a -dest https://region.queue.amazonaws.com/123/queue-b -msgid d623763f-21df-4bc8-9bb6-c93eb98f346d
 
 ## Seeing is believing :)
 
