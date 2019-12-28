@@ -94,7 +94,10 @@ func (c *SQSClient) ListMessages(request QueueOperationsRequest) {
 		for _, m := range resp.Messages {
 			log.Printf("MessageId: %s  Body: %s\n", *m.MessageId, *m.Body)
 		}
-		break
+
+		log.Printf("Messages Listed: %d  \n", c.MessageCount)
+
+		return
 	}
 }
 
@@ -206,7 +209,6 @@ func (c *SQSClient) MoveMessages(request QueueOperationsRequest) {
 		}
 
 		lastMessageCount = len(resp.Messages)
-		// log.Printf("received %v messages...", len(resp.Messages))
 
 		var wg sync.WaitGroup
 		wg.Add(len(resp.Messages))
@@ -249,11 +251,11 @@ func (c *SQSClient) MoveMessages(request QueueOperationsRequest) {
 						log.Printf(deQueueError,
 							*m.ReceiptHandle,
 							err)
+						return
 					}
 				}
 			}(m)
 		}
-
 		// wait for all jobs from this batch...
 		wg.Wait()
 	}
@@ -297,7 +299,7 @@ func routeRequest(req QueueOperationsRequest, client *SQSClient) {
 		return
 	}
 
-	if !req.List && len(req.SourceQueue) > 15 {
+	if req.List && len(req.SourceQueue) > 15 {
 		client.ListMessages(req)
 	}
 

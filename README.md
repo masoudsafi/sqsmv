@@ -23,8 +23,8 @@ environment variables must be set.
     sqsmv -src    <source queue URL>
           -dest   <destination queue URL>
           -msgid  MessageId to be copies or moved
-          -l      lists all message specified using the -src parameter
-          -nodel  copy only, do not dequeue messages from source queue
+          -l      Lists all message specified using the -src parameter
+          -nodel  Copy only, do not dequeue messages from source queue
 
 To list the content of a queue, supply the queue URI and set the switch -l.
 
