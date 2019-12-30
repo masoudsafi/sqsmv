@@ -84,7 +84,6 @@ func (c *SQSClient) ListMessages(request QueueOperationsRequest) {
 
 		if lastMessageCount == 0 && len(resp.Messages) == 0 {
 			// no messages returned twice now, the queue is probably empty
-			//log.Printf("done")
 			log.Printf("Message Count: %d\n\n", c.MessageCount)
 			return
 		}
