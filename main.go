@@ -53,7 +53,7 @@ func NewSQSClient() (*SQSClient, error) {
 
 func (c *SQSClient) ListMessages(request QueueOperationsRequest) {
 
-	log.Printf("List of Messages in Queue:\t%s\n", request.SourceQueue)
+	log.Printf("List of Messages in Queue:\t%s\n\n", request.SourceQueue)
 
 	maxMessages := int64(10)
 	waitTime := int64(0)
@@ -91,7 +91,7 @@ func (c *SQSClient) ListMessages(request QueueOperationsRequest) {
 		lastMessageCount = len(resp.Messages)
 
 		for _, m := range resp.Messages {
-			log.Printf("MessageId: %s  Body: %s\n", *m.MessageId, *m.Body)
+			log.Printf("MessageId: %s  MD5OfBody: %s\n", *m.MessageId, *m.MD5OfBody)
 		}
 
 		log.Printf("Messages Listed: %d  \n", c.MessageCount)
@@ -101,7 +101,7 @@ func (c *SQSClient) ListMessages(request QueueOperationsRequest) {
 }
 
 func (c *SQSClient) MoveMessage(request QueueOperationsRequest) {
-	log.Printf("Move or Copy Message\n\tFrom Queue:\t%s\n\tTo Queue: \t%s\n\tMessageId: \t%s\n", request.SourceQueue, request.DestQueue, request.MessageID)
+	fmt.Printf("Move or Copy Message\n\tFrom Queue:\t%s\n\tTo Queue: \t%s\n\tMessageId: \t%s\n\n", request.SourceQueue, request.DestQueue, request.MessageID)
 
 	maxMessages := int64(10)
 	waitTime := int64(0)
@@ -126,7 +126,7 @@ func (c *SQSClient) MoveMessage(request QueueOperationsRequest) {
 
 		if lastMessageCount == 0 && len(resp.Messages) == 0 {
 			// no messages returned twice now, the queue is probably empty
-			log.Printf("Messages Transferred: %d\n\n", c.MessageCount)
+			fmt.Printf("\nMessages Transferred: %d\n\n", c.MessageCount)
 			return
 		}
 
@@ -148,7 +148,7 @@ func (c *SQSClient) MoveMessage(request QueueOperationsRequest) {
 					action = actionCopy
 				}
 
-				log.Printf(">> %s MessageId: %s  Body: %s\n", action, *m.MessageId, *m.Body)
+				log.Printf("> %s MessageId: %s  MD5OfBody: %s\n", action, *m.MessageId, *m.MD5OfBody)
 
 				_, err := c.AWSSQSClient.SendMessage(&smi)
 
@@ -178,7 +178,7 @@ func (c *SQSClient) MoveMessage(request QueueOperationsRequest) {
 
 func (c *SQSClient) MoveMessages(request QueueOperationsRequest) {
 
-	log.Printf("Move or Copy Messages\nFrom Queue:\t%s\nTo Queue: \t%s\n", request.SourceQueue, request.DestQueue)
+	fmt.Printf("Move or Copy Messages\nFrom Queue:\t%s\nTo Queue: \t%s\n\n", request.SourceQueue, request.DestQueue)
 
 	maxMessages := int64(10)
 	waitTime := int64(0)
@@ -203,7 +203,7 @@ func (c *SQSClient) MoveMessages(request QueueOperationsRequest) {
 
 		if lastMessageCount == 0 && len(resp.Messages) == 0 {
 			// no messages returned twice now, the queue is probably empty
-			log.Printf("Messages Transferred: %d\n\n", c.MessageCount)
+			fmt.Printf("\nMessages Transferred: %d\n\n", c.MessageCount)
 			return
 		}
 
@@ -229,7 +229,7 @@ func (c *SQSClient) MoveMessages(request QueueOperationsRequest) {
 				if request.NoDelete {
 					action = actionCopy
 				}
-				log.Printf("%s MessageId: %s  Body: %s\n", action, *m.MessageId, *m.Body)
+				log.Printf("> %s MessageId: %s  MD5OfBody: %s\n", action, *m.MessageId, *m.MD5OfBody)
 
 				_, err := c.AWSSQSClient.SendMessage(&smi)
 
